@@ -12,65 +12,94 @@
 # Things you can set:
 # PROG_OPTS - Arguments to send to the program. A few defaults are appended to this.
 
+if [ -z ${SCRIPT_NAME} ]; then
+    echo "SCRIPT_NAME not set"
+    exit 1
+fi
+
+if [ -z ${MODULE_NAME} ]; then
+    echo "MODULE_NAME not set"
+    exit 1
+fi
 
 # Local development - uncomment these to use jsvc-daemon from a working copy
-#JSVC=`which jsvc`
-#JAVA_HOME=`jruby -e 'puts Java::JavaLang::System.get_property("java.home")'`
-#JRUBY_HOME=`jruby -e 'puts Java::JavaLang::System.get_property("jruby.home")'`
-#APP_HOME=.
-#PIDFILE=jsvc-$SCRIPT_NAME.pid
-#LOG_DIR=log
+if [ "${JRUBY_DAEMON_DEV}" ]; then
+    echo "jsvc-wrapper, in development mode"
+    JSVC=`which jsvc`
+    JAVA_HOME=`jruby -e 'puts Java::JavaLang::System.get_property("java.home")'`
+    JRUBY_HOME=`jruby -e 'puts Java::JavaLang::System.get_property("jruby.home")'`
+    APP_HOME=.
+    PIDFILE=jsvc-$SCRIPT_NAME.pid
+    LOG_DIR=log
+    # Uncomment for debugging the daemon script
+    JSVC_ARGS_EXTRA="-debug -nodetach "
+    JAVA_PROPS="-DJRubyDaemon.debug=true"
 
-# Standard install
-JSVC=/usr/bin/jsvc
-JAVA_HOME=/usr/lib/jvm/java-6-sun
-JRUBY_HOME=/usr/lib/jruby1.4
-APP_HOME=/usr/lib/$APP_NAME
-USER=$APP_NAME
-PIDFILE=/var/run/$APP_NAME/jsvc-$SCRIPT_NAME.pid
-LOG_DIR=/var/log/$APP_NAME
+    echo "JAVA_HOME  : $JAVA_HOME"
+    echo "JRUBY_HOME : $JRUBY_HOME"
+else
+    # Standard install
+    JSVC=/usr/bin/jsvc
+    JAVA_HOME=/usr/lib/jvm/java-6-sun
+    JRUBY_HOME=/usr/lib/jruby1.4
+    APP_HOME=/usr/lib/$APP_NAME
+    USER=$APP_NAME
+    PIDFILE=/var/run/$APP_NAME/jsvc-$SCRIPT_NAME.pid
+    LOG_DIR=/var/log/$APP_NAME
+fi
 
 # If you want your programs to run as or not as daemons pass a flag to tell them which they are
-PROG_OPTS+=" --no-log-stdout --daemon"
+PROG_OPTS="$PROG_OPTS --no-log-stdout --daemon"
 
 # Implements the jsvc Daemon interface.
 MAIN_CLASS=com.msp.jsvc.JRubyDaemon
 
-# Uncomment for debugging the daemon script
-# JSVC_ARGS_EXTRA="-debug -nodetach"
-
 RUBY_SCRIPT=$APP_HOME/bin/$SCRIPT_NAME
-CLASSPATH=$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/profile.jar\
-:/usr/share/java/commons-daemon.jar:$/usr/share/java/msp-jsvc.jar
 
-JAVA_PROPS="-Djruby.memory.max=500m \
+# Set some jars variables if they aren't already there
+if [ ${#MSP_JSVC_JAR} -eq 0 ]; then
+    MSP_JSVC_JAR=/usr/share/java/msp-jsvc.jar
+fi
+if [ ${#DAEMON_JAR} -eq 0 ]; then
+    DAEMON_JAR=/usr/share/java/commons-daemon.jar
+fi
+
+CLASSPATH=$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/profile.jar:$DAEMON_JAR:$MSP_JSVC_JAR
+
+echo "CLASSPATH  : $CLASSPATH"
+
+JAVA_PROPS="$JAVA_PROPS -Djruby.memory.max=500m \
 -Djruby.stack.max=1024k \
 -Djna.boot.library.path=$JRUBY_HOME/lib/native/linux-i386:$JRUBY_HOME/lib/native/linux-amd64 \
 -Djffi.boot.library.path=$JRUBY_HOME/lib/native/i386-Linux:$JRUBY_HOME/jruby/lib/native/s390x-Linux:$JRUBY_HOME/lib/native/x86_64-Linux \
 -Djruby.home=$JRUBY_HOME \
 -Djruby.lib=$JRUBY_HOME/lib \
 -Djruby.script=jruby \
--Djruby.shell=/bin/sh"
+-Djruby.shell=/bin/sh
+-Djruby.daemon.module.name=$MODULE_NAME"
 
-JAVA_OPTS="-Xmx500m -Xss1024k \
--Xbootclasspath/a:$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/bsf.jar"
+JAVA_OPTS="-Xmx500m -Xss1024k -Xbootclasspath/a:$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/bsf.jar"
 
 JSVC_ARGS="-home $JAVA_HOME \
-$JSVC_ARGS_EXTRA\
--wait 20\
--pidfile $PIDFILE\
+$JSVC_ARGS_EXTRA \
+-wait 20 \
+-pidfile $PIDFILE \
 -user $USER \
--procname jsvc-$SCRIPT_NAME\
--jvm server\
--outfile $LOG_DIR/jsvc-$SCRIPT_NAME.log\
+-procname jsvc-$SCRIPT_NAME \
+-jvm server"
+
+if [ not "${JRUBY_DAEMON_DEV}" ]; then
+    JSVC_ARGS="$JSVC_ARGS \
+-outfile $LOG_DIR/jsvc-$SCRIPT_NAME.log \
 -errfile &1"
+fi
 
 #
 # Stop/Start
 #
 
-STOP_COMMAND=$JSVC $JSVC_ARGS -stop $MAIN_CLASS
-START_COMMAND=$JSVC $JSVC_ARGS -cp $CLASSPATH $JAVA_PROPS $JAVA_OPTS $MAIN_CLASS $RUBY_SCRIPT $PROG_OPTS
+STOP_COMMAND="$JSVC $JSVC_ARGS -stop $MAIN_CLASS"
+START_COMMAND="$JSVC $JSVC_ARGS -cp $CLASSPATH $JAVA_PROPS $JAVA_OPTS $MAIN_CLASS $RUBY_SCRIPT $PROG_OPTS"
 
 case "$1" in
     start)
@@ -123,6 +152,7 @@ case "$1" in
 	else
 	    echo "No pidfile present"
 	fi
+	;;
     *)
 	echo "Unrecognised command. Usage jsvc-daemon [ start | stop ]"
 	;;
