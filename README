@@ -1,0 +1,15 @@
+1# jruby-jsvc
+
+Run your jruby application as a unix daemon, taking advantage of the features you get in jsvc - http://commons.apache.org/daemon/
+
+JSVC is the best way to run a java program (and hence jruby) as an init.d style daemon.  Unfortunately, you can't fork in jruby like you would with MRI-ruby because the vm doesn't survive being forked (lots of important threads die).
+
+Using jsvc lets you can bring up your application in the foregroung, and then detach and possibly setuid (change user), before backgrounding it.
+
+## How to create a jruby-jsvc daemon
+
+1. Install jsvc-jruby
+1. Create a Daemon singleton module underneath your application's namespace, something like DataChomper::Daemon.  This should have a setup?, start and stop method.  setup? should return true, and is basically a detection method.  start is called once the daemon has been backgrounded and is your signal to start accepting connections or chomping strings or whatever your application does.  
+1. Create a boot-up script.  This should require your daemon module and initialize your application so that it is ready to start serving once Daemon.start is called.
+1. Create an init.d script that invokes jsvc-wrapper.bin (or a copy of it).  You'll need to set a few environment variables, and possibly tweak jsvc-wrapper.sh a bit.
+
