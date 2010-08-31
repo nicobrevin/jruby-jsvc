@@ -57,14 +57,14 @@ MAIN_CLASS=com.msp.jsvc.JRubyDaemon
 RUBY_SCRIPT=$APP_HOME/bin/$SCRIPT_NAME
 
 # Set some jars variables if they aren't already there
-if [ ${#MSP_JSVC_JAR} -eq 0 ]; then
-    MSP_JSVC_JAR=/usr/share/java/msp-jsvc.jar
+if [ ${#JRUBY_JSVC_JAR} -eq 0 ]; then
+    JRUBY_JSVC_JAR=/usr/share/java/jruby-jsvc.jar
 fi
 if [ ${#DAEMON_JAR} -eq 0 ]; then
     DAEMON_JAR=/usr/share/java/commons-daemon.jar
 fi
 
-CLASSPATH=$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/profile.jar:$DAEMON_JAR:$MSP_JSVC_JAR
+CLASSPATH=$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/profile.jar:$DAEMON_JAR:$JRUBY_JSVC_JAR
 
 echo "CLASSPATH  : $CLASSPATH"
 

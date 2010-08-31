@@ -3,10 +3,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.msp.jsvc</groupId>
-  <artifactId>jsvc</artifactId>
+  <artifactId>jruby-jsvc</artifactId>
   <version>0.1.0</version>
   <packaging>jar</packaging>
-  
+
   <build>
     <plugins>
       <plugin>
