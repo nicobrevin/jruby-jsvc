@@ -1,5 +1,18 @@
 /*
- * 
+ *  Copyright 2010 Media Service Provider Ltd
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License./*
+ *
  */
 package com.msp.jsvc;
 
@@ -14,10 +27,10 @@ import org.jruby.exceptions.MainExitException;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
-/** 
+/**
  * Implements commons Daemon to bootstrap a jruby instance, initialize your
  * application, and then tell the application to start doing whatever it does.
- * @author nick
+ * @author Nick Griffiths <nicobrevin@gmail.com>
  */
 public class JRubyDaemon implements Daemon {
 
@@ -36,23 +49,25 @@ public class JRubyDaemon implements Daemon {
    */
   public void init(DaemonContext arguments) throws Exception {
     this.controller = arguments.getController();
-    
+
     try {
       initParams();
       initJRuby(arguments);
-      
+
       loadScript();
       checkDaemon();
     } catch (Exception e) {
+      // TODO the fail method should be supported in the next jsvc
+      // version
       this.controller.fail("Some kind of error", e);
       throw e;
     }
-    
+
   }
 
   private void loadScript() {
     if (debug) log("Executing script from: " + rubyConfig.getScriptFileName());
-    
+
     // boot her up. The script should yield control back to us so we
     // can give control back to jsvc once
     try {
@@ -64,7 +79,7 @@ public class JRubyDaemon implements Daemon {
       log("Error executing script: " + e);
       throw e;
     }
-    
+
     appModule = runtime.getModule(appModuleName);
     if (appModule == null) { throw new RuntimeException("Couldn't get module '" + appModuleName + "' from JRuby runtime"); }
     daemon = (RubyModule) appModule.getConstantAt(DAEMON);
@@ -118,18 +133,18 @@ public class JRubyDaemon implements Daemon {
   public void destroy() {
     runtime.tearDown();
   }
-  
+
   private void checkDaemon() {
  // check it has come up OK
     Boolean wasSetup =
       (Boolean) JavaEmbedUtils.rubyToJava(runtime, daemon.callMethod("setup?"), Boolean.class);
-    
+
     if (!wasSetup.booleanValue()) {
       throw new RuntimeException("Script did not call " + daemonName() + ".setup");
     }
-    
+
   }
-  
+
   private void log(String msg) {
     System.err.println("JRubyDaemon: " + msg);
   }
