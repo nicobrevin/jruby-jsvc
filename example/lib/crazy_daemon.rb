@@ -6,11 +6,11 @@
 module Crazy
   module Daemon
 
-    def initialize
+    def init
       puts "Pretending to setup stuff I need, and bind to sockets, etc"
       @setup = true
     end
-    
+
     def setup?
       @setup
     end
@@ -29,9 +29,3 @@ module Crazy
     extend self
   end
 end
-
-# When we are evaluated, we are expected to initialize ourselves
-# so that when start is called, we are all ready to start serving
-# and going about our daemonic business
-Crazy::Daemon.initialize
-
