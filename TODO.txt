@@ -1,0 +1,5 @@
+ - An init.d/jsvc-wrapper.sh generator
+ - win32/procrun support
+ - fail support for decent error messages on startup errors.  This depends on an
+unfinished feature in jsvc.
+ - Gem installer
