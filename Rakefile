@@ -1,4 +1,5 @@
 require 'date'
+require 'rubygems'
 
 desc "creates a rubygem"
 task :build => ['clean', 'target/gem/lib/jruby-jsvc.rb'] do
