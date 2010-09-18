@@ -88,7 +88,7 @@ $JSVC_ARGS_EXTRA \
 -procname jsvc-$SCRIPT_NAME \
 -jvm server"
 
-if [ not "${JRUBY_DAEMON_DEV}" ]; then
+if [ ! "${JRUBY_DAEMON_DEV}" ]; then
     JSVC_ARGS="$JSVC_ARGS \
 -outfile $LOG_DIR/jsvc-$SCRIPT_NAME.log \
 -errfile &1"
