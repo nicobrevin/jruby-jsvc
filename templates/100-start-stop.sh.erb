@@ -1,0 +1,64 @@
+
+#
+# Stop/Start
+#
+
+STOP_COMMAND="$JSVC $JSVC_ARGS -stop $MAIN_CLASS"
+START_COMMAND="$JSVC $JSVC_ARGS -cp $CLASSPATH $JAVA_PROPS $JAVA_OPTS $MAIN_CLASS $RUBY_SCRIPT $PROG_OPTS"
+
+case "$1" in
+    start)
+	if [ -e "$PIDFILE" ]; then
+	    echo "Pidfile already exists, not starting."
+	    exit 1
+	else
+	    echo "Starting $SCRIPT_NAME daemon..."
+	    $START_COMMAND
+	    EXIT_CODE=$?
+	    if [ "$EXIT_CODE" != 0 ]; then
+		echo "Daemon exited with status: $EXIT_CODE. Check pidfile and log"
+	    fi
+	fi
+	;;
+    stop)
+	if [ -e "$PIDFILE" ]; then
+	    echo "Stopping $SCRIPT_NAME daemon..."
+	    $STOP_COMMAND
+	else
+	    echo "No pid file, not stopping."
+	    exit 1
+	fi
+	;;
+    restart)
+	if [ -e "$PIDFILE" ]; then
+	    echo "Stopping $SCRIPT_NAME daemon..."
+	    $STOP_COMMAND
+	fi
+	if [ -e "$PIDFILE" ]; then
+	    echo "Pidfile still present, $SCRIPT_NAME hasn't stopped"
+	    exit 1
+	else
+	    $START_COMMAND
+	    EXIT_CODE=$?
+	    if [ "$EXIT_CODE" != 0 ]; then
+		echo "Daemon exited with status: $EXIT_CODE. Check pidfile and log"
+	    fi
+	fi
+	;;
+    status)
+	if [ "$PIDFILE" ]; then
+	    PID=`cat $PIDFILE`
+	    OUTPUT=`ps $PID | egrep "^$PID "`
+	    if [ ${#OUTPUT} -gt 0 ]; then
+		echo "Service running with pid: $PID"
+	    else
+		echo "Pidfile present, but process not running"
+	    fi
+	else
+	    echo "No pidfile present"
+	fi
+	;;
+    *)
+	echo "Unrecognised command. Usage jsvc-daemon [ start | stop ]"
+	;;
+esac

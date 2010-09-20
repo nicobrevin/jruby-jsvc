@@ -1,0 +1,46 @@
+# If you want your programs to run as or not as daemons pass a flag to tell them which they are
+PROG_OPTS="$PROG_OPTS --no-log-stdout --daemon"
+
+RUBY_SCRIPT=$APP_HOME/bin/$SCRIPT_NAME
+
+# Set some jars variables if they aren't already there
+if [ ${#JRUBY_JSVC_JAR} -eq 0 ]; then
+    JRUBY_JSVC_JAR=/usr/share/java/jruby-jsvc.jar
+fi
+if [ ${#DAEMON_JAR} -eq 0 ]; then
+    DAEMON_JAR=/usr/share/java/commons-daemon.jar
+fi
+
+CLASSPATH=$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/profile.jar:$DAEMON_JAR:$JRUBY_JSVC_JAR
+
+<% if @debug %>
+echo "CLASSPATH  : $CLASSPATH"
+<% end %>
+
+JAVA_NATIVE_PROPS="-Djna.boot.library.path=$JRUBY_HOME/lib/native/linux-i386:$JRUBY_HOME/lib/native/linux-amd64 \
+-Djffi.boot.library.path=$JRUBY_HOME/lib/native/i386-Linux:$JRUBY_HOME/lib/native/s390x-Linux:$JRUBY_HOME/lib/native/x86_64-Linux"
+
+JAVA_PROPS="$JAVA_PROPS -Djruby.memory.max=500m \
+-Djruby.stack.max=1024k \
+$JAVA_NATIVE_PROPS \
+-Djruby.home=$JRUBY_HOME \
+-Djruby.lib=$JRUBY_HOME/lib \
+-Djruby.script=jruby \
+-Djruby.shell=/bin/sh
+-Djruby.daemon.module.name=$MODULE_NAME"
+
+JAVA_OPTS="-Xmx500m -Xss1024k -Xbootclasspath/a:$JRUBY_HOME/lib/jruby.jar"
+
+JSVC_ARGS="-home $JAVA_HOME \
+$JSVC_ARGS_EXTRA \
+-wait 20 \
+-pidfile $PIDFILE \
+-user $APP_USER \
+-procname jsvc-$SCRIPT_NAME \
+-jvm server"
+
+<% unless @debug %>
+JSVC_ARGS="$JSVC_ARGS \
+-outfile $LOG_DIR/jsvc-$SCRIPT_NAME.log \
+-errfile &1"
+<% end %>

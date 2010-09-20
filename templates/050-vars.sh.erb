@@ -1,0 +1,28 @@
+SCRIPT_NAME=<%= @script_name %>
+MODULE_NAME=<%= @module_name %>
+JSVC=<%= @jsvc %>
+JAVA_HOME=<%= @java_home %>
+JRUBY_HOME=<%= @jruby_home %>
+APP_PATH=<%= @app_path %>
+RUBY_SCRIPT=<%= @trinidad_daemon_path %>
+JRUBY_JSVC_JAR=<%= @jruby_jsvc_jar %>
+DAEMON_JAR=<%= @common_daemon_jar %>
+PIDFILE=<%= @pidfile %>
+
+<% if @debug %>
+JSVC_ARGS_EXTRA="-debug -nodetach "
+JAVA_PROPS="-DJRubyDaemon.debug=true"
+
+echo "JAVA_HOME  : $JAVA_HOME"
+echo "JRUBY_HOME : $JRUBY_HOME"
+<% end %>
+
+APP_USER=<%= @app_user %>
+
+<% if @logging %>
+LOG_DIR=/var/log/$APP_NAME
+<% end %>
+
+# Implements the jsvc Daemon interface.
+MAIN_CLASS=com.msp.jsvc.JRubyDaemon
+
