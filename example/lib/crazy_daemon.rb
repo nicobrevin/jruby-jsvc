@@ -8,7 +8,13 @@ module Crazy
 
     def init
       puts "Pretending to setup stuff I need, and bind to sockets, etc"
-      @setup = true
+      if JRUBY_JSVC_FAIL
+        # if you can't initialize your environment and you know why,
+        # you can fail and give an error message using the DaemonInitError.
+        raise JSVC::DaemonInitError, "My database hurts, please mend it."
+      else
+        @setup = true
+      end
     end
 
     def setup?

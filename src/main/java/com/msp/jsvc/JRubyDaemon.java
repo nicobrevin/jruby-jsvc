@@ -16,12 +16,15 @@
  */
 package com.msp.jsvc;
 
+import java.io.IOException;
+import java.net.URL;
+
 import org.apache.commons.daemon.Daemon;
 import org.apache.commons.daemon.DaemonContext;
 import org.apache.commons.daemon.DaemonController;
 import org.apache.commons.daemon.DaemonInitException;
-import org.apache.commons.daemon.support.DaemonLoader;
 import org.jruby.Ruby;
+import org.jruby.RubyException;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyModule;
 import org.jruby.exceptions.MainExitException;
@@ -51,22 +54,13 @@ public class JRubyDaemon implements Daemon {
   public void init(DaemonContext arguments) throws Exception {
     this.controller = arguments.getController();
 
-    try {
-      initParams();
-      initJRuby(arguments);
-
-      loadScript();
-      checkDaemon();
-    } catch (Exception e) {
-      // TODO catch ruby daemon exceptions, throw them as these, 
-      // but let the others go through as they were
-      //throw new DaemonInitException("some kind of error", e);
-      throw e;
-    }
-
+    initParams();
+    initJRuby(arguments);
+    loadScript();
+    checkDaemon();
   }
 
-  private void loadScript() {
+  private void loadScript() throws DaemonInitException {
     if (debug) log("Executing script from: " + rubyConfig.getScriptFileName());
 
     // boot her up. The script should yield control back to us so we
@@ -74,8 +68,13 @@ public class JRubyDaemon implements Daemon {
     try {
       runtime.runFromMain(rubyConfig.getScriptSource(), rubyConfig.getScriptFileName());
     } catch (RaiseException e) {
-      log("Script failed to execute: " + e.getException());
-      throw e;
+      RubyException re = e.getException();
+      if (re.getType().getName().equals("JSVC::DaemonInitError")) {
+        throw new DaemonInitException(re.message.toString());
+      } else {
+        log("Script raised an error: " + e);
+        throw e;
+      }
     } catch (RuntimeException e) {
       log("Error executing script: " + e);
       throw e;
@@ -93,9 +92,20 @@ public class JRubyDaemon implements Daemon {
     rubyConfig.processArguments(arguments.getArguments());
     runtime = Ruby.newInstance(rubyConfig);
     Thread.currentThread().setContextClassLoader(runtime.getJRubyClassLoader());
+    loadSupportScripts();
   }
 
-  private void initParams() throws Exception {
+ private void loadSupportScripts() {
+   String errorsPath = "/ruby/lib/jsvc/errors.rb";
+   URL scriptResource = getClass().getResource(errorsPath);
+   try {
+    runtime.loadFile(scriptResource.toString(), scriptResource.openStream(), false);
+    } catch (IOException e) {
+      throw new RuntimeException("Couldn't load script from " + errorsPath);
+    }
+  }
+
+ private void initParams() throws Exception {
     this.debug = "true".equals(System.getProperty("JRubyDaemon.debug"));
     this.appModuleName = System.getProperty(PROP_MODULE_NAME);
     if (appModuleName == null) {
@@ -141,7 +151,7 @@ public class JRubyDaemon implements Daemon {
       (Boolean) JavaEmbedUtils.rubyToJava(runtime, daemon.callMethod("setup?"), Boolean.class);
 
     if (!wasSetup.booleanValue()) {
-      throw new RuntimeException("Script did not call " + daemonName() + ".setup");
+      throw new RuntimeException("Daemon script did not call " + daemonName() + ".setup - can't tell if init succeeded.");
     }
 
   }

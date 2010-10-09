@@ -54,7 +54,7 @@ PROG_OPTS="$PROG_OPTS --no-log-stdout --daemon"
 # Implements the jsvc Daemon interface.
 MAIN_CLASS=com.msp.jsvc.JRubyDaemon
 
-RUBY_SCRIPT=$APP_HOME/bin/$SCRIPT_NAME
+RUBY_SCRIPT=$APP_HOME/bin/$SCRIPT_NAME.rb
 
 # Set some jars variables if they aren't already there
 if [ ${#JRUBY_JSVC_JAR} -eq 0 ]; then
