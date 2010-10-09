@@ -19,6 +19,7 @@ package com.msp.jsvc;
 import org.apache.commons.daemon.Daemon;
 import org.apache.commons.daemon.DaemonContext;
 import org.apache.commons.daemon.DaemonController;
+import org.apache.commons.daemon.DaemonInitException;
 import org.apache.commons.daemon.support.DaemonLoader;
 import org.jruby.Ruby;
 import org.jruby.RubyInstanceConfig;
@@ -57,9 +58,9 @@ public class JRubyDaemon implements Daemon {
       loadScript();
       checkDaemon();
     } catch (Exception e) {
-      // TODO the fail method should be supported in the next jsvc
-      // version
-      this.controller.fail("Some kind of error", e);
+      // TODO catch ruby daemon exceptions, throw them as these, 
+      // but let the others go through as they were
+      //throw new DaemonInitException("some kind of error", e);
       throw e;
     }
 
