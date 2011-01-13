@@ -49,11 +49,17 @@ public class JRubyDaemon implements Daemon {
   private RubyInstanceConfig rubyConfig;
   private DaemonController controller;
 
+  public JRubyDaemon() {}
+
   /**
    */
   public void init(DaemonContext arguments) throws Exception {
     this.controller = arguments.getController();
 
+    init(arguments.getArguments());
+  }
+
+  public void init(String[] arguments) throws Exception {
     initParams();
     initJRuby(arguments);
     loadScript();
@@ -86,10 +92,10 @@ public class JRubyDaemon implements Daemon {
     if (daemon == null) { throw new RuntimeException("Couldn't get " + DAEMON + " module from " + appModuleName); }
   }
 
-  private void initJRuby(DaemonContext arguments) {
+  private void initJRuby(String[] arguments) {
  // mimicking startup from org.jruby.Main
     this.rubyConfig = new RubyInstanceConfig();
-    rubyConfig.processArguments(arguments.getArguments());
+    rubyConfig.processArguments(arguments);
     runtime = Ruby.newInstance(rubyConfig);
     Thread.currentThread().setContextClassLoader(runtime.getJRubyClassLoader());
     loadSupportScripts();

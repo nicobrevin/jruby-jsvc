@@ -38,7 +38,7 @@
     <dependency>
       <groupId>commons-daemon</groupId>
       <artifactId>commons-daemon</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.5</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
