@@ -1,0 +1,12 @@
+$LOAD_PATH.unshift("lib")
+
+task 'write_init_d', [:out_to] do |task, args|
+  require 'rubygems'
+  require 'init_d'
+
+  File.open(args[:out_to], 'w') do |out|
+    Crazy::InitD.create(out, {})
+    
+  end
+
+end
