@@ -24,9 +24,12 @@ import org.apache.commons.daemon.DaemonContext;
 import org.apache.commons.daemon.DaemonController;
 import org.apache.commons.daemon.DaemonInitException;
 import org.jruby.Ruby;
+import org.jruby.RubyBoolean;
 import org.jruby.RubyException;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyModule;
+import org.jruby.runtime.builtin.IRubyObject;
+import org.jruby.RubyString;
 import org.jruby.exceptions.MainExitException;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -151,10 +154,27 @@ public class JRubyDaemon implements Daemon {
     runtime.tearDown();
   }
 
+  public boolean reload() {
+    if (debug) log("reload requested");
+
+    RubyString reloadString = RubyString.newString(runtime, "reload");
+
+    if (isTrue(daemon.callMethod("respond_to?", reloadString))) {
+      daemon.callMethod("reload");
+      return true;
+    } else {
+      if (debug) log("jruby daemon doesn't respond to reload");
+      return false;
+    }
+  }
+
+  private Boolean isTrue(IRubyObject ro) {
+    return (Boolean) JavaEmbedUtils.rubyToJava(runtime, ro, Boolean.class);
+  }
+
   private void checkDaemon() {
  // check it has come up OK
-    Boolean wasSetup =
-      (Boolean) JavaEmbedUtils.rubyToJava(runtime, daemon.callMethod("setup?"), Boolean.class);
+    Boolean wasSetup = isTrue(daemon.callMethod("setup?"));
 
     if (!wasSetup.booleanValue()) {
       throw new RuntimeException("Daemon script did not call " + daemonName() + ".setup - can't tell if init succeeded.");

@@ -28,6 +28,10 @@ module Crazy
       end
     end
 
+    def reload
+      puts "Reloading my config files, starting again"
+    end
+
     def stop
       @stopped = true
     end
