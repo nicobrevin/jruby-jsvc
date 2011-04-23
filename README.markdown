@@ -1,10 +1,8 @@
 ## jruby-jsvc
 
-Run your jruby application as a unix daemon, taking advantage of the features you get in jsvc - http://commons.apache.org/daemon/
+Run your jruby application as a unix daemon, taking advantage of the features you get in jsvc - http://commons.apache.org/daemon/ working around the fact that you can't really `fork` from jruby.
 
-JSVC is the best way to run a java program (and hence jruby) as an init.d style daemon.  Unfortunately, you can't fork in jruby like you would with MRI-ruby because the vm doesn't survive being forked (lots of important threads die).
-
-Using jsvc lets you can bring up your application in the foreground, check your db connection, ping a mail server or whatever your application needs to survive, possibly setuid (change user - jsvc options), before backgrounding it.
+With jruby-jsvc you can check your application is basically working while it is still attached to your console.  Once it is, you daemonise it.  This lets you do things like checking your db connection, binding to ports or whatever else your application will need to do to be considered running.
 
 ## How to create a jruby-jsvc daemon
 
