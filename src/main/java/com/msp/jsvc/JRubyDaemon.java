@@ -24,7 +24,6 @@ import org.apache.commons.daemon.DaemonContext;
 import org.apache.commons.daemon.DaemonController;
 import org.apache.commons.daemon.DaemonInitException;
 import org.jruby.Ruby;
-import org.jruby.RubyBoolean;
 import org.jruby.RubyException;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyModule;
@@ -35,8 +34,9 @@ import org.jruby.exceptions.RaiseException;
 import org.jruby.javasupport.JavaEmbedUtils;
 
 /**
- * Implements commons Daemon to bootstrap a jruby instance, initialize your
+ * Implements {@link Daemon} to bootstrap a jruby instance, initialize your
  * application, and then tell the application to start doing whatever it does.
+ *
  * @author Nick Griffiths <nicobrevin@gmail.com>
  */
 public class JRubyDaemon implements Daemon {
