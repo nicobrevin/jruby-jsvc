@@ -23,6 +23,7 @@ import org.apache.commons.daemon.Daemon;
 import org.apache.commons.daemon.DaemonContext;
 import org.apache.commons.daemon.DaemonController;
 import org.apache.commons.daemon.DaemonInitException;
+import org.apache.commons.daemon.DaemonUserSignal;
 import org.jruby.Ruby;
 import org.jruby.RubyException;
 import org.jruby.RubyInstanceConfig;
@@ -39,7 +40,7 @@ import org.jruby.javasupport.JavaEmbedUtils;
  *
  * @author Nick Griffiths <nicobrevin@gmail.com>
  */
-public class JRubyDaemon implements Daemon {
+public class JRubyDaemon implements Daemon, DaemonUserSignal {
 
   private static final String PROP_MODULE_NAME = "jruby.daemon.module.name";
   private static final String DAEMON = "Daemon";
@@ -154,17 +155,15 @@ public class JRubyDaemon implements Daemon {
     runtime.tearDown();
   }
 
-  public boolean reload() {
-    if (debug) log("reload requested");
+  public void signal() {
+    if (debug) log("received signal");
 
-    RubyString reloadString = RubyString.newString(runtime, "reload");
+    RubyString reloadString = RubyString.newString(runtime, "signal");
 
     if (isTrue(daemon.callMethod("respond_to?", reloadString))) {
-      daemon.callMethod("reload");
-      return true;
+      daemon.callMethod("signal");
     } else {
-      if (debug) log("jruby daemon doesn't respond to reload");
-      return false;
+      if (debug) log("jruby daemon doesn't respond to signal");
     }
   }
 

@@ -4,7 +4,7 @@
 
   <groupId>com.msp.jsvc</groupId>
   <artifactId>jruby-jsvc</artifactId>
-  <version>0.1.1</version>
+  <version>0.2.0</version>
   <packaging>jar</packaging>
 
   <build>
@@ -38,7 +38,7 @@
     <dependency>
       <groupId>commons-daemon</groupId>
       <artifactId>commons-daemon</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

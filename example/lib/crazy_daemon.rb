@@ -28,7 +28,7 @@ module Crazy
       end
     end
 
-    def reload
+    def signal
       puts "Reloading my config files, starting again"
     end
 
