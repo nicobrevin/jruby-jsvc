@@ -101,8 +101,10 @@ module JSVC
     private
 
     def find_jar
-      Dir['target/jruby-jsvc*.jar'].sort.last or
+      path = Dir['target/jruby-jsvc*.jar'].sort.last or
         raise 'could not find jruby-jsvc jar'
+
+      File.expand_path(path)
     end
   end
 end
