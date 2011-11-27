@@ -38,6 +38,7 @@ case "$1" in
 	    echo "Pidfile still present, $SCRIPT_NAME hasn't stopped"
 	    exit 1
 	else
+            echo "Starting $SCRIPT_NAME daemon..."
 	    $START_COMMAND
 	    EXIT_CODE=$?
 	    if [ "$EXIT_CODE" != 0 ]; then

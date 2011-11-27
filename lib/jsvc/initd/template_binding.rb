@@ -32,13 +32,24 @@ module JSVC
         result
     end
 
+    # FIXME: Maybe move defaults in to different 'profiles', for instance
+    # a dev mode profile, a debian profile, a redhat profile - stuff like that
+
+    def default_script_name
+      app_name
+    end
+
+    def default_app_home
+      '/usr/lib/' + app_name
+    end
+
     def default_jruby_home
       @default_jruby_home ||=
         get_default_java_property("jruby.home")
     end
 
     def default_jsvc
-      "/usr/bin/jsvc"
+      debug ? `which jsvc` : "/usr/bin/jsvc"
     end
 
     def default_java_home
@@ -46,16 +57,12 @@ module JSVC
         get_default_java_property("java.home")
     end
 
-    def default_app_path
-      File.expand_path('.')
-    end
-
     def default_script_path
-      app_path + script_name + '.rb'
+      File.join(app_home, 'bin', script_name + '.rb')
     end
 
     def default_jruby_jsvc_jar
-      '/usr/share/java/jruby-jsvc.jar'
+      debug ? find_jar : '/usr/share/java/jruby-jsvc.jar'
     end
 
     def default_commons_daemon_jar
@@ -67,7 +74,7 @@ module JSVC
     end
 
     def default_app_user
-      script_name
+      debug ? ENV['USER'] : app_name
     end
 
     def default_logging_enabled
@@ -84,11 +91,18 @@ module JSVC
     end
 
     def default_pidfile
-      "/var/run/#{script_name}.pid"
+      debug ? "jsvc-#{script_name}.pid" : "/var/run/#{script_name}.pid"
     end
 
     def get_binding
       self.send(:binding)
+    end
+
+    private
+
+    def find_jar
+      Dir['target/jruby-jsvc*.jar'].sort.last or
+        raise 'could not find jruby-jsvc jar'
     end
   end
 end
