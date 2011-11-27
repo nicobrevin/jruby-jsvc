@@ -1,6 +1,8 @@
-#! /usr/bin/env ruby
+#! /usr/bin/env jruby
 
+require 'rubygems'
 require 'jsvc'
+
 JSVC.init
 
 require 'jsvc/initd_cli'
