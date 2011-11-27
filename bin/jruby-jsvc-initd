@@ -1,4 +1,9 @@
-#! /usr/bin/env jruby
+#! /usr/bin/env ruby
+
+debian_install_dir = '/usr/lib/jruby-jsvc/ruby'
+if File.directory? debian_install_dir
+  $LOAD_PATH.unshift(debian_install_dir)
+end
 
 require 'rubygems'
 require 'jsvc'

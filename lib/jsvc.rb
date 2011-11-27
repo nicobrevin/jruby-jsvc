@@ -1,7 +1,6 @@
 module JSVC
 
   def self.init
-    require 'java'
     begin
       require 'erubis'
     rescue LoadError
