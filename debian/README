@@ -1,0 +1,6 @@
+The Debian Package jruby-jsvc
+----------------------------
+
+This package builds the java library for running jruby-jsvc daemons and a ruby library for building initd scripts suitable for use with jruby-jsvc
+
+ -- Nick Griffiths <nicobrevin@gmail.com>  Sun, 27 Nov 2011 22:02:30 +0000
