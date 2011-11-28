@@ -8,10 +8,15 @@ Homepage: <insert the upstream URL, if relevant>
 #Vcs-Git: git://git.debian.org/collab-maint/jruby-jsvc.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/jruby-jsvc.git;a=summary
 
-Package: jruby-jsvc
+Package: libjruby-jsvc-ruby
 Architecture: all
-Depends:
-Recommends: ruby | jruby1.5 | jruby1.4 | jruby, liberubis-ruby
-Description: initd support for jruby-jsvc
- Install files for building
+Depends: ruby, liberubis-ruby
+Recommends: jruby, jsvc
+Description: Library for initd scripts for jruby-jsvc
+ Library used to build initd scripts for jruby-jsvc daemons.  Not actually needed to be installed in order to run jruby-jsvc daemons, but useful for generating initd scripts, possibly when building your own debian packages
 
+Package: libjruby-jsvc-java
+Architecture: all
+Depends: default-jdk | openjdk-6-jre | openjdk-7-jre, jruby | jruby1.4 | jruby1.5 | jruby1.6, libcommons-daemon-java, jsvc
+Description: Java library for jruby-jsvc daemons
+ Java library used for starting up and controlling jruby daemons with jsvc

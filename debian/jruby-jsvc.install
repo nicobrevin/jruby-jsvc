@@ -1,3 +1,0 @@
-target/jruby-jsvc-*.jar usr/share/java
-bin/jruby-jsvc-initd usr/bin
-lib/* usr/lib/jruby-jsvc/ruby
