@@ -4,3 +4,4 @@ debian/*.ex
 debian/*.log
 debian/libjruby-jsvc-java/**/*
 debian/libjruby-jsvc-ruby/**/*
+debian/jruby-jsvc-initd/**/*

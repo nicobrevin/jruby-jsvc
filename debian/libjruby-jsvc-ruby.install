@@ -1,1 +1,2 @@
 lib/* usr/lib/ruby/1.8
+templates/linux/* usr/share/jruby-jsvc/templates
