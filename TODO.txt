@@ -1,3 +1,6 @@
- - An init.d/jsvc-wrapper.sh generator
- - debian packages
+ - tighten up package dependencies - installing on to a plain 5.0.8 is broken, probably also on to debian 6.0
+ - allow jruby-jsvc-initd to work with jruby as well as ruby1.8
+ - use 'profiles' with initd generator to supply sensible defaults
+ - help for the initd generator and better error messages when it fails
+ - build debian packages for the example app to show how it's done
  - win32/procrun support - I believe this is done, but I can't test it (not a windows user)
