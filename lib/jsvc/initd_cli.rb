@@ -13,9 +13,12 @@ class JSVC::InitdCLI
     # turns argv in a hash
     params, extra = parse(argv)
 
+    options = {
+      :template_dir => find_template_dir
+    }
     # create the template and output it on stdout
     begin
-      JSVC::Initd.new.write($stdout, params)
+      JSVC::Initd.new(options).write($stdout, params)
     rescue JSVC::Initd::MissingParamError => e
       $stderr.puts "You must supply a value for #{e.missing_param}"
       exit 1
@@ -26,6 +29,11 @@ class JSVC::InitdCLI
 
   def parse(argv)
     Params.new.parse(argv)
+  end
+
+  def find_template_dir
+    ['/usr/share/jruby-jsvc/templates', 'templates/linux'].
+      find {|dirname| File.directory?(dirname) }
   end
 
 end
