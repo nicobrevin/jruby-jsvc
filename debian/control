@@ -26,3 +26,9 @@ Architecture: all
 Depends: libjruby-jsvc-ruby
 Description: Command for building initd scripts for jruby-jsvc
  Command, written in plain ruby, for building initd scripts that you can use with jruby-jsvc.  This doesn't actually use jruby, as it doesn't need to, and there is better package support on debian for ruby-1.8.7
+
+Package: jruby-jsvc-example
+Architecture: all
+Depends: libjruby-jsvc-ruby, jruby-jsvc-initd
+Description: Example daemon application using jruby-jsvc
+ Basic application that brings all the pieces together, showing you how to deploy a ruby daemon using jruby-jsvc
