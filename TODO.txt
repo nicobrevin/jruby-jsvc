@@ -4,3 +4,4 @@
  - help for the initd generator and better error messages when it fails
  - build debian packages for the example app to show how it's done
  - win32/procrun support - I believe this is done, but I can't test it (not a windows user)
+ - support for older versions of commons-daemon (i.e no DaemonUserSignal class present)
