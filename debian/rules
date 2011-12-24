@@ -23,4 +23,4 @@ JAR_VERSION=0.2.0
 override_dh_auto_build:
 	mvn clean
 	mvn package
-
+	bin/make-debian-initd-files.sh good_daemon debian/jruby-jsvc-example.init

@@ -17,7 +17,7 @@ Description: Library for initd scripts for jruby-jsvc
 
 Package: libjruby-jsvc-java
 Architecture: all
-Depends: default-jdk | openjdk-6-jre | openjdk-7-jre, jruby | jruby1.4 | jruby1.5 | jruby1.6, libcommons-daemon-java, jsvc
+Depends: default-jdk | openjdk-6-jre | openjdk-7-jre, jruby | jruby1.4 | jruby1.5 | jruby1.6, libcommons-daemon-java (>= 1.0.6), jsvc (>= 1.0.6)
 Description: Java library for jruby-jsvc daemons
  Java library used for starting up and controlling jruby daemons with jsvc
 
@@ -29,6 +29,6 @@ Description: Command for building initd scripts for jruby-jsvc
 
 Package: jruby-jsvc-example
 Architecture: all
-Depends: libjruby-jsvc-ruby, jruby-jsvc-initd
+Depends: libjruby-jsvc-ruby, jruby-jsvc-initd, openjdk-6-jre
 Description: Example daemon application using jruby-jsvc
  Basic application that brings all the pieces together, showing you how to deploy a ruby daemon using jruby-jsvc
