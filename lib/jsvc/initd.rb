@@ -1,5 +1,7 @@
 class JSVC::Initd
   require 'jsvc/initd/template_binding'
+  require 'jsvc/initd/param_dsl'
+  require 'jsvc/initd/parameters'
 
   def initialize(options={})
     @template_dir = options.fetch(:template_dir, default_template_dir)

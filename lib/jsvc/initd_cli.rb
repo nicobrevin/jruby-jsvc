@@ -11,12 +11,37 @@ class JSVC::InitdCLI
 
   def run(argv)
     # turns argv in a hash
-    params, extra = parse(argv)
+    params, *extra = parse(argv)
 
     options = {
       :template_dir => find_template_dir
     }
-    # create the template and output it on stdout
+
+    if extra.include? "--help"
+      print_template_parameter_help(options, params)
+    else
+      build_from_template(options, params)
+    end
+  end
+
+  private
+
+  def print_template_parameter_help(options, params)
+    to_format = JSVC::Initd.defined_param_names.map do |name|
+      param = JSVC::Initd.defined_params[name]
+
+      [param.name.to_s, param.doc]
+    end
+
+    max_widths = to_format.transpose.map {|col| col.map {|v| v.length}.max }
+
+    to_format.each do |row|
+      puts row.zip(max_widths).map {|v, w| v.ljust(w) }.join(" ")
+    end
+  end
+
+  # and output it on stdout
+  def build_from_template(options, params)
     begin
       JSVC::Initd.new(options).write($stdout, params)
     rescue JSVC::Initd::MissingParamError => e
@@ -24,8 +49,6 @@ class JSVC::InitdCLI
       exit 1
     end
   end
-
-  private
 
   def parse(argv)
     Params.new.parse(argv)

@@ -1,3 +1,4 @@
+require 'jsvc'
 require 'jsvc/initd_cli'
 
 describe 'building an init.d style daemon controller script' do
@@ -32,8 +33,18 @@ describe 'building an init.d style daemon controller script' do
     end
   end
 
+  describe "Script output" do
+    it "can create a script to run the daemon in debug mode" do
+      puts methods.sort
+
+      create_script "--param-debug=true"
+
+      output.should contain("echo \"CLASSPATH : $CLASSPATH\"")
+      output.should_not contain("-outfile")
+      output.should_not contain("-errfile")
+    end
+  end
   it 'runs in dev mode, loading templates from the working directory' do
-    `bin/jruby-jsvc-initd --param-script-name=Web --param-module-name=Server --param-app-path=./lib`
   end
 
   it 'barfs if you do not pass all the required parameters in' do
