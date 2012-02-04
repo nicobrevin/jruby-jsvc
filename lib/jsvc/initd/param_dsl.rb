@@ -14,6 +14,14 @@ class JSVC::Initd
     @parameters && Hash[*@parameters.map {|p| [p.name, p] }.flatten]
   end
 
+  def self.declare_defaults(name)
+    (@declared_defaults ||= []) << name
+  end
+
+  def self.declared_defaults
+    @declared_defaults.dup
+  end
+
   def self.clear_defined!
     @parameters = nil
   end

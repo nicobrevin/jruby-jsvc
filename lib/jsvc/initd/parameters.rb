@@ -1,3 +1,6 @@
+JSVC::Initd.declare_defaults :debian
+JSVC::Initd.declare_defaults :dev
+
 JSVC::Initd.define_params do
 
   doc "Name of your application"

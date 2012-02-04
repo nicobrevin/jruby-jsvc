@@ -32,14 +32,17 @@ class JSVC::InitdCLI
   private
 
   def print_template_parameter_help(options, params)
-    $stderr.puts "Usage: jruby-jsvc-initd [MODE] [OPTIONS] --param-[PARAM_NAME]=PARAM_VALUE"
+    $stderr.puts "Usage: jruby-jsvc-initd [DEFAULT-STYLE] [OPTIONS] --param-[PARAM_NAME]=PARAM_VALUE"
     $stderr.puts
-    $stderr.puts "Known modes:"
-    JSVC::Initd.known_modes.each do |mode|
+    $stderr.puts "Output an initd script,  suitable for controlling your jruby-jsvc daemon, to stdout."
+    $stderr.puts "Pick a default style to supply sensible defaults for your script, and override inividual parameters using --param-[PARAM_NAME]=VALUE"
+    $stderr.puts
+    $stderr.puts "Available default styles:"
+    JSVC::Initd.declared_defaults.each do |mode|
       $stderr.puts "  #{mode}"
     end
     $stderr.puts
-    $stderr.puts "Known parameters:"
+    $stderr.puts "Parameters:"
     to_format = JSVC::Initd.defined_param_names.map do |name|
       param = JSVC::Initd.defined_params[name]
 
@@ -49,7 +52,7 @@ class JSVC::InitdCLI
     max_widths = to_format.transpose.map {|col| col.map {|v| v.length}.max }
 
     to_format.each do |row|
-      $stderr.puts row.zip(max_widths).map {|v, w| v.ljust(w) }.join(" ")
+      $stderr.puts "  " + row.zip(max_widths).map {|v, w| v.ljust(w) }.join(" ")
     end
   end
 
