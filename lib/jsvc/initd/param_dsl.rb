@@ -128,7 +128,12 @@ class JSVC::Initd
       else
         p = @parameters[key]
         raise UnknownParamError.new(key) if p.nil?
-        p.default(self) or raise MissingParamError.new(key)
+
+        if (v = p.default(self)).nil?
+          raise MissingParamError.new(key)
+        else
+          v
+        end
       end
     end
 

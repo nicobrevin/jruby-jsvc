@@ -42,7 +42,7 @@ describe 'building an init.d style daemon controller script' do
     end
 
     it "can create a script to run the daemon in debug mode" do
-      create_script "dev --param-app-name=test --param-module-name=MyModule --param-debug=true"
+      create_script "dev --param-app-name=test --param-module-name=MyModule"
 
       last_run.should exit_with(0)
 
@@ -51,7 +51,7 @@ describe 'building an init.d style daemon controller script' do
     end
 
     it "can be created in debian mode" do
-      create_script "debian --param-app-name=test --param-module-name=MyModule --param-debug=false"
+      create_script "debian --param-app-name=test --param-module-name=MyModule"
 
       last_run.should exit_with(0)
 
