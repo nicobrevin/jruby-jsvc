@@ -34,28 +34,27 @@ describe 'building an init.d style daemon controller script' do
   end
 
   describe "Script output" do
+
+    def create_script(args)
+      command = "ruby -Ilib bin/jruby-jsvc-initd #{args}"
+      @output = `#{command}`
+      @exitstatus = $?.exitstatus
+    end
+
     it "can create a script to run the daemon in debug mode" do
-      puts methods.sort
+      create_script "--param-app-name=test --param-module-name=MyModule --param-debug=true"
 
-      create_script "--param-debug=true"
-
-      output.should contain("echo \"CLASSPATH : $CLASSPATH\"")
-      output.should_not contain("-outfile")
-      output.should_not contain("-errfile")
+      @exitstatus.should == 0
+      @output.should_not include("-outfile")
+      @output.should_not include("-errfile")
     end
   end
-  it 'runs in dev mode, loading templates from the working directory' do
-  end
 
-  it 'barfs if you do not pass all the required parameters in' do
-  end
+  # IDEA: use vagrant to do more realistic testing?
 
-  it 'can take non-standard parameters from the command line in the form "--param-[NAME]=[VALUE]"' do
-
-  end
-
-  it 'can run in debian mode, loading templates from /usr/share/jruby-jsvc/templates' do
-    # fakeroot, perhaps?
-  end
+  it 'runs in dev mode, loading templates from the working directory'
+  it 'barfs if you do not pass all the required parameters in'
+  it 'can take non-standard parameters from the command line in the form "--param-[NAME]=[VALUE]"'
+  it 'can run in debian mode, loading templates from /usr/share/jruby-jsvc/templates'
 
 end

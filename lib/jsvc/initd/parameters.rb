@@ -3,6 +3,9 @@ JSVC::Initd.define_params do
   doc "Name of your application"
   string :app_name
 
+  doc "Name of the ruby constant under which the Daemon module can be found"
+  string :module_name
+
   doc "Name of the ruby script that is called to start the application"
   string :script_name do |d|
     d.app_name
@@ -42,7 +45,7 @@ JSVC::Initd.define_params do
 
   doc "Path to script which starts the application"
   path :script_path do |d|
-    File.join(app_home, 'bin', script_name + '.rb')
+    File.join(d.app_home, 'bin', d.script_name + '.rb')
   end
 
   doc "Path to jruby-jsvc.jar"
@@ -62,7 +65,23 @@ JSVC::Initd.define_params do
   string :app_user do |d|
     {
       :debian => d.app_name,
-      :dev    => ENV['user']
+      :dev    => ENV['USER']
+    }
+  end
+
+  doc "Path to pidfile location"
+  path :pidfile do |d|
+    {
+      :debian => "/var/run/#{d.app_name}/#{d.script_name}.pid",
+      :dev => File.expand_path(d.script_name + '.pid')
+    }
+  end
+
+  doc "Run the daemon in debug mode"
+  boolean :debug do |d|
+    {
+      :debian => false,
+      :dev    => true
     }
   end
 

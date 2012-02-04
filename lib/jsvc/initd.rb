@@ -29,9 +29,10 @@ class JSVC::Initd
       inject {|a,b| a+b }
   end
 
-  def write(out, template_params)
+  def write(out, mode, template_params)
     template = Erubis::Eruby.new(template_string)
-    binding = TemplateBinding.new(template_params).get_binding
+    binding = Context.new(mode, JSVC::Initd.defined_params, template_params).get_binding
+
     result = template.result(binding)
     out.write(result)
   end

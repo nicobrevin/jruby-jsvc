@@ -49,6 +49,20 @@ class JSVC::Initd
     def parameters
       @parameters.clone
     end
+
+    private
+
+    def get_default_java_property(prop_name)
+      fail_unless_jruby_present!
+      command = "jruby -e 'puts Java::JavaLang::System.get_property(\"#{prop_name}\")'"
+      `#{command}`
+    end
+
+    def fail_unless_jruby_present!
+      `which jruby`
+      raise "jruby interpreter needed and not installed or not in PATH" if $? != 0
+    end
+
   end
 
   class Parameter
@@ -78,6 +92,25 @@ class JSVC::Initd
     end
   end
 
+  class ParamError < StandardError
+
+    attr_reader :param_name
+
+    def initialize(name)
+      @param_name = name
+      super(@param_name)
+    end
+  end
+
+  # Raised when a value is looked for a parameter that isn't defined and
+  # no value could be found for it either
+  class UnknownParamError < ParamError ; end
+
+  # Raised when a value is looked for for which no value has been given and
+  # default has been specified
+  class MissingParamError < ParamError ; end
+
+
   class Context
 
     attr_reader :mode
@@ -94,10 +127,13 @@ class JSVC::Initd
         @values[key]
       else
         p = @parameters[key]
-        raise "no such parameter: #{key}" if p.nil?
-        p && p.default(self)
+        raise UnknownParamError.new(key) if p.nil?
+        p.default(self) or raise MissingParamError.new(key)
       end
     end
 
+    def get_binding
+      binding
+    end
   end
 end
