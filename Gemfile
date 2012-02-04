@@ -1,5 +1,8 @@
 source :rubygems
 
-gem 'POpen4'
-gem 'rspec'
 gem 'erubis'
+
+group :test do
+  gem 'POpen4'
+  gem 'rspec'
+end

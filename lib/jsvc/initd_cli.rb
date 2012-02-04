@@ -5,6 +5,8 @@
 #
 class JSVC::InitdCLI
 
+  class ExitException < Exception ; end
+
   require 'jsvc/initd_cli/params'
 
   def initialize
@@ -17,10 +19,12 @@ class JSVC::InitdCLI
       :template_dir => find_template_dir
     }
 
+    mode = extra.find {|arg| /^[^\-]/.match(arg) }
+    mode = mode && mode.to_sym
+
     if extra.include? "--help"
       print_template_parameter_help(options, params)
     else
-      mode = :dev
       build_from_template(options, mode, params)
     end
   end
@@ -28,10 +32,14 @@ class JSVC::InitdCLI
   private
 
   def print_template_parameter_help(options, params)
-    puts "Usage: jruby-jsvc-initd [OPTIONS] --param-[PARAM_NAME]=PARAM_VALUE"
-    puts
-    puts "Known parameters:
-"
+    $stderr.puts "Usage: jruby-jsvc-initd [MODE] [OPTIONS] --param-[PARAM_NAME]=PARAM_VALUE"
+    $stderr.puts
+    $stderr.puts "Known modes:"
+    JSVC::Initd.known_modes.each do |mode|
+      $stderr.puts "  #{mode}"
+    end
+    $stderr.puts
+    $stderr.puts "Known parameters:"
     to_format = JSVC::Initd.defined_param_names.map do |name|
       param = JSVC::Initd.defined_params[name]
 
@@ -41,7 +49,7 @@ class JSVC::InitdCLI
     max_widths = to_format.transpose.map {|col| col.map {|v| v.length}.max }
 
     to_format.each do |row|
-      puts row.zip(max_widths).map {|v, w| v.ljust(w) }.join(" ")
+      $stderr.puts row.zip(max_widths).map {|v, w| v.ljust(w) }.join(" ")
     end
   end
 
@@ -52,12 +60,12 @@ class JSVC::InitdCLI
     rescue JSVC::Initd::UnknownParamError => e
       msg =
         "Template tried to reference parameter '#{e.param_name}', but this was " +
-        "not supplied via --param-PARAM-NAME"
+        "not supplied via --param-PARAM-NAME.  See the help for more details"
 
       $stderr.puts msg
       exit 1
     rescue JSVC::Initd::MissingParamError => e
-      msg = "You must supply a value for #{e.param_name}"
+      msg = "You must supply a value for #{e.param_name} via --param-PARAM-NAME=VALUE\nSee the help for more details"
 
       $stderr.puts msg
       exit 1

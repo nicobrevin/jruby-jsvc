@@ -1,5 +1,5 @@
 # If you want your programs to run as or not as daemons pass a flag to tell them which they are
-PROG_OPTS="$PROG_OPTS --no-log-stdout --daemon"
+PROG_OPTS="$PROG_OPTS <%= program_options %>"
 
 if [ ! -e $JRUBY_JSVC_JAR ] ; then
     echo "fatal: JRUBY_JSVC_JAR $JRUBY_JSVC_JAR is missing"
@@ -13,7 +13,7 @@ fi
 
 CLASSPATH=$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/profile.jar:$DAEMON_JAR:$JRUBY_JSVC_JAR
 
-<% if @debug %>
+<% if debug == 'true' %>
 echo "CLASSPATH  : $CLASSPATH"
 <% end %>
 
@@ -39,7 +39,7 @@ $JSVC_ARGS_EXTRA \
 -procname jsvc-$SCRIPT_NAME \
 -jvm server"
 
-<% unless debug %>
+<% if debug == 'false' %>
 JSVC_ARGS="$JSVC_ARGS \
 -outfile $LOG_DIR/jsvc-$SCRIPT_NAME.log \
 -errfile &1"

@@ -77,6 +77,11 @@ JSVC::Initd.define_params do
     }
   end
 
+  doc "Options supplied to ARGV of your program"
+  string :program_options do |d|
+    ""
+  end
+
   doc "Run the daemon in debug mode"
   boolean :debug do |d|
     {
