@@ -175,7 +175,7 @@ public class JRubyDaemon implements Daemon, DaemonUserSignal {
  // check it has come up OK
     Boolean wasSetup = isTrue(daemon.callMethod("setup?"));
 
-    if (!wasSetup.booleanValue()) {
+    if (wasSetup == null || !wasSetup.booleanValue()) {
       throw new RuntimeException("Daemon script did not call " + daemonName() + ".setup - can't tell if init succeeded.");
     }
 
