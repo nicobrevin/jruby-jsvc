@@ -1,5 +1,5 @@
 Source: jruby-jsvc
-Section: unknown
+Section: libs
 Priority: extra
 Maintainer: Nick Griffiths <nicobrevin@gmail.com>
 Build-Depends: debhelper (>= 8.0.0), maven2, liberubis-ruby, ruby
