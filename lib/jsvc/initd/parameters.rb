@@ -88,8 +88,8 @@ JSVC::Initd.define_params do
   doc "Run the daemon in debug mode"
   boolean :debug do |d|
     {
-      :debian => false,
-      :dev    => true
+      :debian => "false",
+      :dev    => "true"
     }
   end
 

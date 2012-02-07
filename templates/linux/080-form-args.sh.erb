@@ -13,7 +13,7 @@ fi
 
 CLASSPATH=$JRUBY_HOME/lib/jruby.jar:$JRUBY_HOME/lib/profile.jar:$DAEMON_JAR:$JRUBY_JSVC_JAR
 
-<% if debug %>
+<% if debug == "true" %>
 echo "CLASSPATH  : $CLASSPATH"
 <% end %>
 
@@ -38,9 +38,8 @@ $JSVC_ARGS_EXTRA \
 -user $APP_USER \
 -procname jsvc-$SCRIPT_NAME \
 -jvm server"
-<%= debug.inspect %>
 
-<% if ! debug %>
+<% if debug == "false" %>
 JSVC_ARGS="$JSVC_ARGS \
 -outfile $LOG_DIR/jsvc-$SCRIPT_NAME.log \
 -errfile &1"
