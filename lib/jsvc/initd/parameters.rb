@@ -55,7 +55,7 @@ JSVC::Initd.define_params do
   path :jruby_jsvc_jar do |d|
     {
       :debian => '/usr/share/java/jruby-jsvc.jar',
-      :dev    => File.expand_path(Dir['target/jruby-jsvc*.jar'].sort.last)
+      :dev    => Dir.exists?('target') && File.expand_path(Dir['target/jruby-jsvc*.jar'].sort.last)
     }
   end
 
