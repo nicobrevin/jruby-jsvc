@@ -10,7 +10,7 @@ JRUBY_JSVC_JAR=<%= jruby_jsvc_jar %>
 DAEMON_JAR=<%= commons_daemon_jar %>
 PIDFILE=<%= pidfile %>
 
-<% if debug %>
+<% if debug == 'true' %>
 JSVC_ARGS_EXTRA="-debug -nodetach "
 JAVA_PROPS="-DJRubyDaemon.debug=true"
 

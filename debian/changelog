@@ -1,3 +1,9 @@
+jruby-jsvc (0.3.3) stable; urgency=low
+
+  * Another bugfix release
+
+ -- Nick Griffiths <nick@matai>  Tue, 07 Feb 2012 20:13:28 +0000
+
 jruby-jsvc (0.3.2-1) stable; urgency=low
 
   * Another bugfix release

@@ -48,6 +48,9 @@ describe 'building an init.d style daemon controller script' do
 
       last_stdout.should_not include("-outfile")
       last_stdout.should_not include("-errfile")
+
+      last_stdout.should include("-nodetach")
+      last_stdout.should include("-debug")
     end
 
     it "can be created in debian mode" do
@@ -57,6 +60,10 @@ describe 'building an init.d style daemon controller script' do
 
       last_stdout.should include("-outfile")
       last_stdout.should include("-errfile")
+
+      last_stdout.should_not include("-nodetach")
+      last_stdout.should_not include("-debug")
+
       # FIXME some more assertions would be nice
     end
 

@@ -4,7 +4,7 @@
 
   <groupId>com.msp.jsvc</groupId>
   <artifactId>jruby-jsvc</artifactId>
-  <version>0.3.2</version>
+  <version>0.3.3</version>
   <packaging>jar</packaging>
 
   <build>
