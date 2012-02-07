@@ -1,3 +1,9 @@
+jruby-jsvc (0.3.1) stable; urgency=low
+
+  * Bugfix release
+
+ -- Nick Griffiths <nick@matai>  Tue, 07 Feb 2012 17:09:12 +0000
+
 jruby-jsvc (0.3.0ubuntu1) oneiric; urgency=low
 
   * Release with debian support, should work on squeeze
