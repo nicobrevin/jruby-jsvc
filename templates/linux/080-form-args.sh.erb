@@ -20,8 +20,8 @@ echo "CLASSPATH  : $CLASSPATH"
 JAVA_NATIVE_PROPS="-Djna.boot.library.path=$JRUBY_HOME/lib/native/linux-i386:$JRUBY_HOME/lib/native/linux-amd64 \
 -Djffi.boot.library.path=$JRUBY_HOME/lib/native/i386-Linux:$JRUBY_HOME/lib/native/s390x-Linux:$JRUBY_HOME/lib/native/x86_64-Linux"
 
-JAVA_PROPS="$JAVA_PROPS -Djruby.memory.max=500m \
--Djruby.stack.max=1024k \
+JAVA_PROPS="$JAVA_PROPS -Djruby.memory.max=$JVM_MAX_HEAP_SIZE \
+-Djruby.stack.max=$JVM_THREAD_STACK_SIZE \
 $JAVA_NATIVE_PROPS \
 -Djruby.home=$JRUBY_HOME \
 -Djruby.lib=$JRUBY_HOME/lib \
@@ -29,7 +29,10 @@ $JAVA_NATIVE_PROPS \
 -Djruby.shell=/bin/sh
 -Djruby.daemon.module.name=$MODULE_NAME"
 
-JAVA_OPTS="-Xmx500m -Xss1024k -Xbootclasspath/a:$JRUBY_HOME/lib/jruby.jar"
+JAVA_OPTS="-Xmx$JVM_MAX_HEAP_SIZE \
+-Xms$JVM_INITIAL_HEAP_SIZE \
+-Xss$JVM_THREAD_STACK_SIZE \
+ -Xbootclasspath/a:$JRUBY_HOME/lib/jruby.jar"
 
 JSVC_ARGS="-home $JAVA_HOME \
 $JSVC_ARGS_EXTRA \

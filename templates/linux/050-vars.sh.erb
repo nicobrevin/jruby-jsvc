@@ -27,3 +27,13 @@ LOG_DIR=/var/log/$APP_NAME
 # Implements the jsvc Daemon interface.
 MAIN_CLASS=com.msp.jsvc.JRubyDaemon
 
+# most important jvm parameters!
+JVM_MAX_HEAP_SIZE=512m
+JVM_INITIAL_HEAP_SIZE=512m
+JVM_THREAD_STACK_SIZE=1024k
+
+# local overrides
+if [ -e /etc/default/${SCRIPT_NAME} ]; then
+  source /etc/default/${SCRIPT_NAME}
+fi
+
