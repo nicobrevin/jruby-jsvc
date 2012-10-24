@@ -1,3 +1,9 @@
+jruby-jsvc (0.4.0) stable; urgency=low
+
+  * small initd script change
+
+ -- Nick Griffiths <nicobrevin@gmail.com>  Wed, 24 Oct 2012 20:27:41 +0100
+
 jruby-jsvc (0.3.3) stable; urgency=low
 
   * Another bugfix release
