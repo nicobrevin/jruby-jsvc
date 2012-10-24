@@ -36,7 +36,7 @@ JAVA_OPTS="-Xmx$JVM_MAX_HEAP_SIZE \
 
 JSVC_ARGS="-home $JAVA_HOME \
 $JSVC_ARGS_EXTRA \
--wait 20 \
+-wait $JSVC_WAIT_TIME_SECONDS \
 -pidfile $PIDFILE \
 -user $APP_USER \
 -procname jsvc-$SCRIPT_NAME \

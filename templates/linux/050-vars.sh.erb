@@ -32,6 +32,11 @@ JVM_MAX_HEAP_SIZE=512m
 JVM_INITIAL_HEAP_SIZE=512m
 JVM_THREAD_STACK_SIZE=1024k
 
+# Wait this long for daemon to start up before considering it to have failed.
+# Must be in multiples of 10, minimum of 10 seconds.
+# Default is high (ten minutes) enough to be considered wait forever.
+JSVC_WAIT_TIME_SECONDS=600
+
 # local overrides
 if [ -e /etc/default/${SCRIPT_NAME} ]; then
   source /etc/default/${SCRIPT_NAME}
