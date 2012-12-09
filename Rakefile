@@ -7,11 +7,11 @@ task :build => ['clean', 'target/gem/lib/jruby-jsvc.rb'] do
 
   jars = FileList['target/jruby-jsvc-*.jar']
   version = jars.first.gsub(/(?:.+)jruby\-jsvc\-(.+).jar/, '\1').sub(/-SNAPSHOT/, '')
-  
+
   cp FileList['README.markdown', 'LICENSE'], 'target/gem'
   cp jars, 'target/gem/lib'
-  cp File.expand_path('~/.m2/repository/commons-daemon/commons-daemon/1.0.1/commons-daemon-1.0.1.jar'), 'target/gem/lib'
-  
+  cp File.expand_path('~/.m2/repository/commons-daemon/commons-daemon/1.0.6/commons-daemon-1.0.6.jar'), 'target/gem/lib'
+
   Dir.chdir('target/gem') do
     gemspec = Gem::Specification.new do |s|
       s.name = "jruby-jsvc"
@@ -22,10 +22,10 @@ task :build => ['clean', 'target/gem/lib/jruby-jsvc.rb'] do
       s.homepage = 'http://github.com/nicobrevin/jruby-jsvc'
       s.has_rdoc = false
       s.require_paths = %w{lib}
-      
+
       s.files = FileList['./**/*'].exclude('*.gem')
     end
-    
+
     Gem::Builder.new(gemspec).build
     mv FileList['*.gem'], '..'
   end
