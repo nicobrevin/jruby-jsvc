@@ -12,7 +12,12 @@ signal handling in your daemon (roll your logs, reload your configuration).
 ## How to create a jruby-jsvc daemon
 
 These instructions are aimed at someone using a debian based system, although
-you can use jruby-jsvc with any *nix that can run jsvc.
+you can use jruby-jsvc with any *nix that can run jsvc, you just need to delve
+a bit deeper.
+
+There is a working example that can be installed as a debian package.  It is very
+simple, but should give you a complete guide to how to deploy apps on to debian
+with jruby-jsvc.
 
 1. Install jsvc.  Your system may come with it, or you may have to build it
 yourself from http://commons.apache.org/daemon/.  It isn't the most difficult
@@ -35,6 +40,7 @@ couple of examples in example/bin - one which succeeds, the other fails
 (Demonstrating the DaemonInitException).
 
 1. Create an init.d script using the jruby-jsvc-initd command.  Take a look at
-bin/make-debian-initd-files.sh as an example
+bin/make-debian-initd-files.sh for an example.  The jruby-jsvc-initd command has
+some help output to aid you.
 
 1. Start/stop the daemon with your init.d script.  Crazy.
