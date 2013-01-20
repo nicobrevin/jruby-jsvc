@@ -2,12 +2,17 @@
 
 Run your jruby application as a unix daemon, via
 [jsvc](http://commons.apache.org/daemon/).  Works around the fact that you
-can't really `fork` from jruby/java.
+can't really `fork` from jruby/java with all the nice features you'd expect
+in a unix daemon.
 
-With jruby-jsvc you can check your application has started properly before it
-is backgrounded, and then control it like you would other unix daemons.  If
-you have commons-daemon-1.0.6 you can make use of SIGUSR2 to have some custom
-signal handling in your daemon (roll your logs, reload your configuration).
+## Features
+
+ - Check your application has started properly before it is backgrounded.
+ - Pidfiles!
+ - Friendly process name for `ps` output
+ - Build initd scripts that work properly and that your sys-admin will like
+ - Debian packaging
+ - Works on Windows, apparently :)
 
 ## How to create a jruby-jsvc daemon
 
@@ -25,7 +30,7 @@ thing to get running. By default, jruby-jsvc expects the `jsvc` excecutable
 to be on your path, and expects the `commons-daemon` jar to be installed in to
 `/usr/share/java/commons-daemon.jar`.
 
-1. Install jsvc-jruby.  You can either check it out from source and build it,
+1. Install jruby-jsvc.  You can either check it out from source and build it,
 or install the debian packages from the downloads page.
 
 1. Take a look at `example/lib/crazy_daemon.rb` - you need to create an object
