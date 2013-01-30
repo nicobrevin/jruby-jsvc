@@ -1,8 +1,14 @@
+jruby-jsvc (0.5.1-2) stable; urgency=low
+
+  * Update debian version for jruby-jsvc.jar symlink fix
+
+ -- Nick Griffiths <nick@mediasp.com>  Wed, 30 Jan 2013 13:36:04 +0000
+
 jruby-jsvc (0.5.1) stable; urgency=low
 
   * jruby-jsvc#6 - sourcing works with squeeze
 
- -- Nick Griffiths <nicobrevin@gmail.com>  Sun, 20 Jan 2013 23:53:35 +0000
+ -- Nick Griffiths <nick@mediasp.com>  Wed, 30 Jan 2013 13:35:39 +0000
 
 jruby-jsvc (0.5.0) stable; urgency=low
 
