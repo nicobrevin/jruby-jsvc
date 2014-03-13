@@ -1,5 +1,7 @@
 require 'date'
 require 'rubygems'
+require 'bundler'
+require 'rubygems/package'
 
 desc "creates a rubygem"
 task :build => ['clean', 'target/gem/lib/jruby-jsvc.rb'] do
@@ -16,6 +18,7 @@ task :build => ['clean', 'target/gem/lib/jruby-jsvc.rb'] do
     gemspec = Gem::Specification.new do |s|
       s.name = "jruby-jsvc"
       s.version = version
+      s.author = 'nicobrevin'
       s.date = Date.today.to_s
       s.description = "Use jsvc to run a jruby app as an init.d style daemon"
       s.summary = "Use jsvc to run a jruby app as an init.d style daemon"
@@ -26,7 +29,7 @@ task :build => ['clean', 'target/gem/lib/jruby-jsvc.rb'] do
       s.files = FileList['./**/*'].exclude('*.gem')
     end
 
-    Gem::Builder.new(gemspec).build
+    Gem::Package.build(gemspec)
     mv FileList['*.gem'], '..'
   end
 end
